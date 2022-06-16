@@ -1,0 +1,21 @@
+name: dl_worker_test
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      # Bring SourceCode
+      - name: Checkout
+        uses: actions/checkout@v2
+  
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+    if: contains(github.ref, 'master') && github.event.pull_request.merged == true
