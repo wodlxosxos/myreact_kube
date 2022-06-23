@@ -8,7 +8,7 @@ pipeline {
             steps {
                 checkout scm
                 script {
-                    echo "branch = ${env.BRANCH_NAME}"
+                    env.BRANCH_NAME = sh (script: "git rev-parse --abbrev-ref HEAD")
                 }
             }
         }
