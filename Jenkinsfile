@@ -15,6 +15,9 @@ node {
                         env.GIT_COMMIT_SHORT = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
                         env.GIT_COMMIT_SHORT = env.GIT_COMMIT_SHORT.substring(0,7)
                         DIRECTORY = "dev"
+                        if (env.BRANCH_NAME == "master") {
+                            DIRECTORY = "master"
+                        }
                         echo "${DIRECTORY}"
                         echo "${env.GIT_COMMIT_SHORT}"
                         sh "git config user.email wodlxosxos73@gmail.com"
