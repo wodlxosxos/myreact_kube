@@ -10,17 +10,12 @@ node {
     stage('Update GIT') {
             script {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                    withCredentials([usernamePassword(credentialsId: 'testgithub', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                         //def encodedPassword = URLEncoder.encode("$GIT_PASSWORD",'UTF-8')
+                        DOCKERTAG = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
+                        echo "${DOCKERTAG.substring(0, 7)}"
                         sh "git config user.email wodlxosxos73@gmail.com"
                         sh "git config user.name wodlxosxos"
-                        //sh "git switch master"
-                        sh "cat deployment.yaml"
-                        sh "sed -i 's+wodlxosxos73/react-app-ci-pipeline.*+wodlxosxos73/react-app-ci-pipeline:${DOCKERTAG}+g' deployment.yaml"
-                        sh "cat deployment.yaml"
-                        sh "git add ."
-                        sh "git commit -m 'Done by Jenkins Job changemanifest: ${env.BUILD_NUMBER}'"
-                        sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${GIT_USERNAME}/myreact_kube.git HEAD:master"
       }
     }
   }
