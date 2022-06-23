@@ -18,7 +18,7 @@ node {
                         if (env.BRANCH_NAME == "master") {
                             DIRECTORY = "master"
                         }
-                        echo "branch = ${DIRECTORY}"
+                        echo "branch = ${env.BRANCH_NAME}"
                         echo "${DIRECTORY}"
                         echo "${env.GIT_COMMIT_SHORT}"
                         sh "git config user.email wodlxosxos73@gmail.com"
