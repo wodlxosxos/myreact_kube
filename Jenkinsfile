@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        DIRECTORY = ""
+        env.DIRECTORY = 'prod'
     }
     stages {
         stage('Clone repository') {
@@ -22,8 +22,6 @@ pipeline {
                             env.GIT_COMMIT_SHORT = env.GIT_COMMIT_SHORT.substring(0,7)
                             if (env.GIT_BRANCH.split("/")[1] == 'develop') {
                                 env.DIRECTORY = "dev"
-                            } else {
-                                env.DIRECTORY = "prod"
                             }
                             sh "git config user.email wodlxosxos73@gmail.com"
                             sh "git config user.name wodlxosxos"
