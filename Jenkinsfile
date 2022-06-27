@@ -33,7 +33,7 @@ pipeline {
         }
         stage('Trigger Manifest') {
             steps {
-                build job: 'update-test', parameters: [string(name: 'DIRECTORY', value: DIRECTORY)]
+                build job: 'update-test', parameters: [string(name: 'DIRECTORY', value: "${DIRECTORY}")]
             }
         }
     }
