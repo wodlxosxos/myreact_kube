@@ -20,10 +20,11 @@ pipeline {
                             //def encodedPassword = URLEncoder.encode("$GIT_PASSWORD",'UTF-8')
                             env.GIT_COMMIT_SHORT = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
                             env.GIT_COMMIT_SHORT = env.GIT_COMMIT_SHORT.substring(0,7)
-                            
-                            echo "branch = ${env.BRANCH_NAME}"
-                            echo "branch2 = ${env.GIT_BRANCH.split("/")[1]}"
-                            echo "${env.GIT_COMMIT_SHORT}"
+                            if (env.GIT_BRANCH.split("/")[1] == 'develop') {
+                                env.DIRECTORY = dev
+                            } else {
+                                env.DIRECTORY = prod
+                            }
                             sh "git config user.email wodlxosxos73@gmail.com"
                             sh "git config user.name wodlxosxos"
                         }
@@ -33,7 +34,7 @@ pipeline {
         }
         stage('Trigger Manifest') {
             steps {
-                build job: 'update-test', parameters: [string(name: 'DIRECTORY', value: "${DIRECTORY}")]
+                build job: 'update-test', parameters: [string(name: 'DIRECTORY', value: env.DIRECTORY)]
             }
         }
     }
