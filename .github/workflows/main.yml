@@ -27,5 +27,5 @@ jobs:
           url: ${{ secrets.JENKINS_WEBHOOK }}
           user: "admin"
           token: ${{ secrets.JENKINS_API_TOKEN }}
-          job: "DL_WORKER_BUILD"
+          job: "test"
     if:  github.event.pull_request.merged == true
