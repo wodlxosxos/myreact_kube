@@ -1,28 +1,39 @@
-node {
-    def app
-
-    stage('Clone repository') {
-      
-
-        checkout scm
+pipeline {
+    agent any
+    environment {
+        DIRECTORY = ""
     }
-
-    stage('Update GIT') {
-            script {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                        //def encodedPassword = URLEncoder.encode("$GIT_PASSWORD",'UTF-8')
-                        sh "git config user.email wodlxosxos73@gmail.com"
-                        sh "git config user.name wodlxosxos"
-                        //sh "git switch master"
-                        sh "cat deployment.yaml"
-                        sh "sed -i 's+wodlxosxos73/react-app-ci-pipeline.*+wodlxosxos73/react-app-ci-pipeline:${DOCKERTAG}+g' deployment.yaml"
-                        sh "cat deployment.yaml"
-                        sh "git add ."
-                        sh "git commit -m 'Done by Jenkins Job changemanifest: ${env.BUILD_NUMBER}'"
-                        sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${GIT_USERNAME}/myreact_kube.git HEAD:master"
-      }
+    stages {
+        stage('Clone repository') {
+            steps {
+                checkout scm
+                script {
+                    env.BRANCH_NAME = sh (script: "git rev-parse --abbrev-ref HEAD", returnStdout: true)
+                }
+            }
+        }
+        stage('Update GIT') {
+            steps{
+                script {
+                    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                        withCredentials([usernamePassword(credentialsId: 'testgithub', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                            //def encodedPassword = URLEncoder.encode("$GIT_PASSWORD",'UTF-8')
+                            env.GIT_COMMIT_SHORT = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
+                            env.GIT_COMMIT_SHORT = env.GIT_COMMIT_SHORT.substring(0,7)
+                            DIRECTORY = "dev"
+                            if (env.BRANCH_NAME == "master") {
+                                DIRECTORY = "master"
+                            }
+                            echo "branch = ${env.BRANCH_NAME}"
+                            echo "branch2 = ${env.GIT_BRANCH}"
+                            echo "${DIRECTORY}"
+                            echo "${env.GIT_COMMIT_SHORT}"
+                            sh "git config user.email wodlxosxos73@gmail.com"
+                            sh "git config user.name wodlxosxos"
+                        }
+                    }
+                }
+            }
+        }
     }
-  }
-}
 }
