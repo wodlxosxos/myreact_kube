@@ -21,4 +21,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: trigger
+        uses: appleboy/jenkins-action@master
+        with:
+          url: ${{ secrets.JENKINS_WEBHOOK }}
+          user: "admin"
+          token: ${{ secrets.JENKINS_API_TOKEN }}
+          job: "DL_WORKER_BUILD"
     if:  github.event.pull_request.merged == true
