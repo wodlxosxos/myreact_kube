@@ -6,7 +6,11 @@ pipeline {
                 checkout scm
                 script {
                     env.BRANCH_NAME = sh (script: "git rev-parse --abbrev-ref HEAD", returnStdout: true)
-                    env.DIRECTORY = "prod"
+                    if (env.BRANCH_NAME == 'develop') {
+                        env.DIRECTORY = "dev"
+                    } else {
+                        env.DIRECTORY = "prod"
+                    }
                 }
             }
         }
@@ -18,9 +22,7 @@ pipeline {
                             //def encodedPassword = URLEncoder.encode("$GIT_PASSWORD",'UTF-8')
                             env.GIT_COMMIT_SHORT = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
                             env.GIT_COMMIT_SHORT = env.GIT_COMMIT_SHORT.substring(0,7)
-                            if (env.GIT_BRANCH.split("/")[1] == 'develop') {
-                                env.DIRECTORY = "dev"
-                            }
+                            
                             sh "git config user.email wodlxosxos73@gmail.com"
                             sh "git config user.name wodlxosxos"
                         }
