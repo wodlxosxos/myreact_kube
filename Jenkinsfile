@@ -25,7 +25,7 @@ pipeline {
                                 DIRECTORY = "master"
                             }
                             echo "branch = ${env.BRANCH_NAME}"
-                            echo "branch2 = ${env.GIT_BRANCH}"
+                            echo "branch2 = ${env.GIT_BRANCH.split("/")[1]}"
                             echo "${DIRECTORY}"
                             echo "${env.GIT_COMMIT_SHORT}"
                             sh "git config user.email wodlxosxos73@gmail.com"
