@@ -1,14 +1,12 @@
 pipeline {
     agent any
-    environment {
-        env.DIRECTORY = 'prod'
-    }
     stages {
         stage('Clone repository') {
             steps {
                 checkout scm
                 script {
                     env.BRANCH_NAME = sh (script: "git rev-parse --abbrev-ref HEAD", returnStdout: true)
+                    env.DIRECTORY = "prod"
                 }
             }
         }
