@@ -1,14 +1,16 @@
 pipeline {
     agent any
-    environment {
-        DIRECTORY = ""
-    }
     stages {
         stage('Clone repository') {
             steps {
                 checkout scm
                 script {
-                    env.BRANCH_NAME = sh (script: "git rev-parse --abbrev-ref HEAD", returnStdout: true)
+                    env.BRANCH_NAME = env.GIT_BRANCH.split("/")[1]
+                    if (env.BRANCH_NAME == 'develop') {
+                        env.DIRECTORY = "dev"
+                    } else {
+                        env.DIRECTORY = "prod"
+                    }
                 }
             }
         }
@@ -20,19 +22,17 @@ pipeline {
                             //def encodedPassword = URLEncoder.encode("$GIT_PASSWORD",'UTF-8')
                             env.GIT_COMMIT_SHORT = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
                             env.GIT_COMMIT_SHORT = env.GIT_COMMIT_SHORT.substring(0,7)
-                            DIRECTORY = "dev"
-                            if (env.BRANCH_NAME == "master") {
-                                DIRECTORY = "master"
-                            }
-                            echo "branch = ${env.BRANCH_NAME}"
-                            echo "branch2 = ${env.GIT_BRANCH}"
-                            echo "${DIRECTORY}"
-                            echo "${env.GIT_COMMIT_SHORT}"
+                            
                             sh "git config user.email wodlxosxos73@gmail.com"
                             sh "git config user.name wodlxosxos"
                         }
                     }
                 }
+            }
+        }
+        stage('Trigger Manifest') {
+            steps {
+                build job: 'update-test', parameters: [string(name: 'DIRECTORY', value: env.DIRECTORY)]
             }
         }
     }
