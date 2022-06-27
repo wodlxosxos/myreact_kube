@@ -21,9 +21,9 @@ pipeline {
                             env.GIT_COMMIT_SHORT = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
                             env.GIT_COMMIT_SHORT = env.GIT_COMMIT_SHORT.substring(0,7)
                             if (env.GIT_BRANCH.split("/")[1] == 'develop') {
-                                env.DIRECTORY = dev
+                                env.DIRECTORY = "dev"
                             } else {
-                                env.DIRECTORY = prod
+                                env.DIRECTORY = "prod"
                             }
                             sh "git config user.email wodlxosxos73@gmail.com"
                             sh "git config user.name wodlxosxos"
