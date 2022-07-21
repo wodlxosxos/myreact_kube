@@ -24,6 +24,8 @@ pipeline {
                             echo "${env.GIT_COMMIT_SHORT}"
                             env.GIT_COMMIT_SHORT = env.GIT_COMMIT_SHORT.split("\n")[1]
                             env.GIT_COMMIT_SHORT = env.GIT_COMMIT_SHORT.substring(0,7)
+                            echo "####################################################"
+                            echo "${env.GIT_COMMIT_SHORT}"
                             
                             sh "git config user.email wodlxosxos73@gmail.com"
                             sh "git config user.name wodlxosxos"
