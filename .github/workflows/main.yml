@@ -24,5 +24,5 @@ jobs:
         if: startsWith(github.head_ref, 'hotfix') == false || github.head_ref == 'develop'
       - name: Test1
         uses: actions/checkout@v2
-      - if: startsWith(github.head_ref, 'hotfix') == true && github.head_ref == 'master'
+        if: startsWith(github.head_ref, 'hotfix') == true && github.head_ref == 'master'
     if:  github.event.pull_request.merged == true
