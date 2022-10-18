@@ -19,10 +19,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - if: startsWith(github.head_ref, 'hotfix') == true || github.head_ref == 'develop'
+        name: Checkout
         uses: actions/checkout@v2
-        if: ${{ !startsWith(github.head_ref, 'hotfix') }} || ${{ github.head_ref == 'develop'}}
-      - name: Test1
+      - if: startsWith(github.head_ref, 'hotfix') == false && github.head_ref == 'master'
+        name: Test1
         uses: actions/checkout@v2
-        if: ${{ startsWith(github.head_ref, 'hotfix') }} && ${{ github.head_ref == 'main'}}
     if:  github.event.pull_request.merged == true
